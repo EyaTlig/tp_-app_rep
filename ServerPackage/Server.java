@@ -1,41 +1,56 @@
 package ServerPackage;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
+ public static void main (String[] args) {
+ try {
+ ServerSocket serverSocket = new ServerSocket(1234);
+ System.out.println("I am a server waiting for a client connexion...");
+ Socket socket = serverSocket.accept();
+ 
+ InputStream inputStream = socket.getInputStream();
+ OutputStream outputStream = socket.getOutputStream();
+ System.out.println("Waiting for a number ... ");
+ int nb = inputStream.read();
+ System.out.println("Data received : " + nb);
+ int choice = inputStream.read();
+ int rep;
+ switch (choice) {
+ case 1:
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-	
-		
-		try {
-			ServerSocket ss=new ServerSocket(1234);
-			System.out.println("Je suis un serveur en attente la connexion d'un client ");
-		    Socket s=ss.accept();
-		    System.out.println("Un client connecté ");
-		    InputStream is= s.getInputStream();
-		     OutputStream os=s.getOutputStream();
-			System.out.println("J'attend un nombre x = ");
-		    int x=is.read();
-		  
-		    int nb=x*5;
-			System.out.println("La réponse: ");	
-			
-			os.write(nb);
-			//La derniére étape: Fermer socket
-			s.close();
-		  
-	
-		  }catch (IOException e){
-			e.printStackTrace();
-		}
-		
-	}
-
+ System.out.println("The client selected Addition operation");
+ rep = nb + 5;
+ outputStream.write(rep);
+ break;
+ case 2:
+ System.out.println("The client selected Soustraction operation");
+ rep = nb - 5;
+ outputStream.write(rep);
+ break;
+ case 3:
+ System.out.println("The client selected Multiplication operation");
+ rep = nb * 5;
+ outputStream.write(rep);
+ break;
+ case 4:
+ System.out.println("The client selected Division operation");
+ rep = nb / 5;
+ outputStream.write(rep);
+ break;
+ default:
+ System.out.println("Return to Client.");
+ }
+ System.out.println("Closing the socket...");
+ socket.close();
+ serverSocket.close();
+ } catch (Exception e) {
+ e.printStackTrace();
+ }
+ }
 }
-    
-
-	
